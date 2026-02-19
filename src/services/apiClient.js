@@ -9,17 +9,3 @@ export const postData = async (url, data) => {
   const response = await axiosInstance.post(url, data);
   return response.data;
 };
-
-/*import { postData } from "../utils/apiClient.js";
-
-export default {
-  async login(email, password) {
-    const response = await postData("usuarios/login", {
-      email,
-      password,
-    });
-    return response;
-  },
-};
-
-*/
