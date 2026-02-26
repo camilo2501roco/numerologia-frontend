@@ -1,42 +1,24 @@
 <template>
   <div class="login-view">
     <!-- Header -->
-    <AuthHeader
-      title="PORTAL DE "
-      highlight="USUARIO"
-      subtitle="Ingresa a tu lectura numerológica"
-    />
+    <AuthHeader title="PORTAL DE " highlight="USUARIO" subtitle="Ingresa a tu lectura numerológica" />
 
     <!-- Card Login -->
     <div class="glass-card login-card">
       <!-- Decoraciones -->
-      <span class="card-deco card-deco--moon">🌙</span>
-      <span class="card-deco card-deco--star">✦</span>
+      <span class="card-deco card-deco--moon"></span>
+      <span class="card-deco card-deco--star"></span>
 
       <h2 class="login-card__title">Acceso al Portal</h2>
       <p class="login-card__desc">Ingresa tus credenciales para continuar tu viaje.</p>
 
       <!-- Formulario -->
       <q-form @submit.prevent="handleLogin" class="login-form">
-        <CosmicInput
-          v-model="email"
-          icon="alternate_email"
-          label="Correo Electrónico"
-          type="email"
-          placeholder="tu@cosmos.com"
-          :error="errors.email"
-          @update:model-value="clearError('email')"
-        />
+        <CosmicInput v-model="email" icon="alternate_email" label="Correo Electrónico" type="email"
+          placeholder="tu@cosmos.com" :error="errors.email" @update:model-value="clearError('email')" />
 
-        <CosmicInput
-          v-model="password"
-          icon="lock"
-          label="Contraseña"
-          type="password"
-          placeholder="••••••••"
-          :error="errors.password"
-          @update:model-value="clearError('password')"
-        />
+        <CosmicInput v-model="password" icon="lock" label="Contraseña" type="password" placeholder="••••••••"
+          :error="errors.password" @update:model-value="clearError('password')" />
 
         <!-- Olvidé contraseña -->
         <div class="login-card__forgot">
@@ -44,13 +26,8 @@
         </div>
 
         <!-- Botón Login -->
-        <CosmicButton
-          label="Iniciar Sesión →"
-          variant="orange"
-          :loading="loading"
-          loading-text="Verificando..."
-          @click="handleLogin"
-        />
+        <CosmicButton label="Iniciar Sesión →" variant="orange" :loading="loading" loading-text="Verificando..."
+          @click="handleLogin" />
 
 
       </q-form>
@@ -91,7 +68,7 @@ import CosmicButton from "@/components/Auth/CosmicButton.vue";
 
 const router = useRouter();
 const authStore = useAuthStore();
-const { errors, validateLogin, clearError, clearErrors } = useAuthForm();
+const { errors, setErrors, clearError, validateRequiredEmail, validateRequired } = useAuthForm();
 const notify = useNotifications();
 
 const email = ref("");
@@ -99,8 +76,13 @@ const password = ref("");
 const loading = ref(false);
 
 async function handleLogin() {
-  // Validar campos
-  if (!validateLogin(email.value, password.value)) {
+  // Validación UX mínima
+  const newErrors = {};
+  if (validateRequiredEmail(email.value)) newErrors.email = validateRequiredEmail(email.value);
+  if (validateRequired(password.value, "Contraseña")) newErrors.password = validateRequired(password.value, "Contraseña");
+
+  if (Object.keys(newErrors).length > 0) {
+    setErrors(newErrors);
     return;
   }
 
@@ -215,12 +197,10 @@ async function handleLogin() {
   content: "";
   flex: 1;
   height: 1px;
-  background: linear-gradient(
-    to right,
-    transparent,
-    var(--border-subtle),
-    transparent
-  );
+  background: linear-gradient(to right,
+      transparent,
+      var(--border-subtle),
+      transparent);
 }
 
 .login-card__divider span {

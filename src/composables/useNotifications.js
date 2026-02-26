@@ -1,87 +1,42 @@
 import { Notify } from "quasar";
 
-/**
- * Composable reutilizable de notificaciones.
- * Usa Quasar Notify con el estilo cósmico del proyecto.
- *
- * Uso:
- *   const { success, error, warning, info } = useNotifications()
- *   success('¡Operación exitosa!')
- *   error('Algo salió mal', 'Detalle opcional')
- */
+const notificationConfig = {
+  success: {
+    timeout: 3000,
+    icon: "check_circle",
+    class: "cosmic-notify--success",
+  },
+  error: { timeout: 4000, icon: "error", class: "cosmic-notify--error" },
+  warning: { timeout: 3500, icon: "warning", class: "cosmic-notify--warning" },
+  info: { timeout: 3000, icon: "auto_awesome", class: "cosmic-notify--info" },
+};
+
 export function useNotifications() {
+  const notify = (type, message, caption = "") => {
+    const config = notificationConfig[type];
+    Notify.create({
+      message,
+      caption,
+      position: "top",
+      timeout: config.timeout,
+      icon: config.icon,
+      classes: `cosmic-notify ${config.class}`,
+      actions: [
+        {
+          icon: "close",
+          color: "white",
+          flat: true,
+          round: true,
+        },
+      ],
+      html: true,
+    });
+  };
 
-    const success = (message, caption = '') => {
-        Notify.create({
-            message,
-            caption,
-            position: 'top',
-            timeout: 3000,
-            icon: 'check_circle',
-            classes: 'cosmic-notify cosmic-notify--success',
-            actions: [{
-                icon: 'close',
-                color: 'white',
-                flat: true,
-                round: true
-            }],
-            html: true
-        })
-    }
-
-    const error = (message, caption = '') => {
-        Notify.create({
-            message,
-            caption,
-            position: 'top',
-            timeout: 4000,
-            icon: 'error',
-            classes: 'cosmic-notify cosmic-notify--error',
-            actions: [{
-                icon: 'close',
-                color: 'white',
-                flat: true,
-                round: true
-            }],
-            html: true
-        })
-    }
-
-    const warning = (message, caption = '') => {
-        Notify.create({
-            message,
-            caption,
-            position: 'top',
-            timeout: 3500,
-            icon: 'warning',
-            classes: 'cosmic-notify cosmic-notify--warning',
-            actions: [{
-                icon: 'close',
-                color: 'white',
-                flat: true,
-                round: true
-            }],
-            html: true
-        })
-    }
-
-    const info = (message, caption = '') => {
-        Notify.create({
-            message,
-            caption,
-            position: 'top',
-            timeout: 3000,
-            icon: 'auto_awesome',
-            classes: 'cosmic-notify cosmic-notify--info',
-            actions: [{
-                icon: 'close',
-                color: 'white',
-                flat: true,
-                round: true
-            }],
-            html: true
-        })
-    }
-
-    return { success, error, warning, info }
+  return {
+    success: (msg, cap) => notify("success", msg, cap),
+    error: (msg, cap) => notify("error", msg, cap),
+    warning: (msg, cap) => notify("warning", msg, cap),
+    info: (msg, cap) => notify("info", msg, cap),
+  };
 }

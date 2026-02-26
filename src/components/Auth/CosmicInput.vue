@@ -1,28 +1,15 @@
 <template>
   <div class="cosmic-input-wrapper">
     <label v-if="label" class="cosmic-input__label">{{ label }}</label>
-    <q-input
-      :model-value="modelValue"
-      @update:model-value="$emit('update:modelValue', $event)"
-      :type="computedType"
-      :placeholder="placeholder"
-      :error="!!error"
-      :error-message="error"
-      hide-bottom-space
-      outlined
-      dark
-      class="cosmic-input"
-      :class="{ 'cosmic-input--has-error': !!error }"
-    >
+    <q-input :model-value="modelValue" @update:model-value="handleInput" :type="computedType" :placeholder="placeholder"
+      :error="!!error" :error-message="error" hide-bottom-space outlined dark class="cosmic-input"
+      :class="{ 'cosmic-input--has-error': !!error }">
       <template #prepend>
         <q-icon :name="icon" class="cosmic-input__icon" />
       </template>
       <template v-if="type === 'password'" #append>
-        <q-icon
-          :name="showPassword ? 'visibility_off' : 'visibility'"
-          class="cosmic-input__toggle"
-          @click="showPassword = !showPassword"
-        />
+        <q-icon :name="showPassword ? 'visibility_off' : 'visibility'" class="cosmic-input__toggle"
+          @click="showPassword = !showPassword" />
       </template>
     </q-input>
   </div>
@@ -40,16 +27,17 @@ const props = defineProps({
   error: { type: String, default: "" },
 });
 
-defineEmits(["update:modelValue"]);
+const emit = defineEmits(["update:modelValue"]);
 
 const showPassword = ref(false);
 
-const computedType = computed(() => {
-  if (props.type === "password") {
-    return showPassword.value ? "text" : "password";
-  }
-  return props.type;
-});
+const computedType = computed(() =>
+  props.type === 'password' ? (showPassword.value ? 'text' : 'password') : props.type
+);
+
+const handleInput = (value) => {
+  emit("update:modelValue", value);
+};
 </script>
 
 <style scoped>

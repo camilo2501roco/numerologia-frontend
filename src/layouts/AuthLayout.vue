@@ -2,7 +2,7 @@
   <div class="auth-layout">
     <!-- Partículas estelares -->
     <div class="stars-container">
-      <div v-for="n in 30" :key="n" class="star" :style="generateStarStyle(n)"></div>
+      <div v-for="star in stars" :key="star.id" class="star" :style="star.style"></div>
     </div>
 
     <!-- Nubes cósmicas -->
@@ -25,21 +25,22 @@
 </template>
 
 <script setup>
-function generateStarStyle(index) {
-  const left = Math.random() * 100;
-  const top = Math.random() * 100;
-  const size = Math.random() * 3 + 1;
-  const delay = Math.random() * 5;
-  const duration = Math.random() * 3 + 2;
-  return {
-    left: `${left}%`,
-    top: `${top}%`,
-    width: `${size}px`,
-    height: `${size}px`,
-    animationDelay: `${delay}s`,
-    animationDuration: `${duration}s`,
-  };
-}
+import { ref } from 'vue';
+
+// Precalcular estrellas una sola vez
+const stars = ref(
+  Array.from({ length: 30 }, (_, i) => ({
+    id: i,
+    style: {
+      left: `${Math.random() * 100}%`,
+      top: `${Math.random() * 100}%`,
+      width: `${Math.random() * 3 + 1}px`,
+      height: `${Math.random() * 3 + 1}px`,
+      animationDelay: `${Math.random() * 5}s`,
+      animationDuration: `${Math.random() * 3 + 2}s`,
+    }
+  }))
+);
 </script>
 
 <style scoped>

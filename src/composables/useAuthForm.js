@@ -1,115 +1,49 @@
 import { ref, computed } from "vue";
 
 /**
- * Composable para validación de formularios de autenticación
- * Proporciona validadores reutilizables para login y registro
+ * Composable para manejo de errores de formularios.
+ * Validación UX mínima (requerido, formato email).
+ * El backend valida lógica de negocio.
  */
 export function useAuthForm() {
-    // ═══ Estado de errores ═══
-    const errors = ref({});
+  const errors = ref({});
 
-    // ═══ Validadores individuales ═══
+  // Validación UX mínima: email requerido y formato
+  function validateRequiredEmail(email) {
+    if (!email?.trim()) return "El email es obligatorio";
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email.trim())) return "Email inválido";
+    return "";
+  }
 
-    function validateEmail(email) {
-        if (!email || !email.trim()) {
-            return "Este campo es obligatorio";
-        }
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email.trim())) {
-            return "Formato de correo inválido";
-        }
-        return "";
-    }
+  // Validación UX: campo requerido genérico
+  function validateRequired(value, fieldName = "Campo") {
+    return !value?.trim() ? `${fieldName} es obligatorio` : "";
+  }
 
-    function validatePassword(password) {
-        if (!password) {
-            return "Este campo es obligatorio";
-        }
-        if (password.length < 6) {
-            return "La contraseña debe tener al menos 6 caracteres";
-        }
-        return "";
-    }
+  // Agrupar errores
+  function setErrors(newErrors) {
+    errors.value = newErrors;
+  }
 
-    function validateName(name) {
-        if (!name || !name.trim()) {
-            return "Este campo es obligatorio";
-        }
-        if (name.trim().length < 3) {
-            return "El nombre debe tener al menos 3 caracteres";
-        }
-        return "";
-    }
+  function clearError(field) {
+    const { [field]: _, ...rest } = errors.value;
+    errors.value = rest;
+  }
 
-    function validateBirthDate(date) {
-        if (!date) {
-            return "Este campo es obligatorio";
-        }
-        const birthDate = new Date(date);
-        const today = new Date();
-        if (isNaN(birthDate.getTime())) {
-            return "Fecha inválida";
-        }
-        if (birthDate >= today) {
-            return "Fecha inválida. Ingresa una fecha pasada";
-        }
-        return "";
-    }
+  function clearAllErrors() {
+    errors.value = {};
+  }
 
-    // ═══ Validar formulario de Login ═══
-    function validateLogin(email, password) {
-        const newErrors = {};
-        const emailError = validateEmail(email);
-        const passwordError = validatePassword(password);
+  const hasErrors = computed(() => Object.keys(errors.value).length > 0);
 
-        if (emailError) newErrors.email = emailError;
-        if (passwordError) newErrors.password = passwordError;
-
-        errors.value = newErrors;
-        return Object.keys(newErrors).length === 0;
-    }
-
-    // ═══ Validar formulario de Registro ═══
-    function validateRegister(nombre, email, password, fechaNacimiento) {
-        const newErrors = {};
-        const nameError = validateName(nombre);
-        const emailError = validateEmail(email);
-        const passwordError = validatePassword(password);
-        const dateError = validateBirthDate(fechaNacimiento);
-
-        if (nameError) newErrors.nombre = nameError;
-        if (emailError) newErrors.email = emailError;
-        if (passwordError) newErrors.password = passwordError;
-        if (dateError) newErrors.fechaNacimiento = dateError;
-
-        errors.value = newErrors;
-        return Object.keys(newErrors).length === 0;
-    }
-
-    // ═══ Limpiar errores ═══
-    function clearErrors() {
-        errors.value = {};
-    }
-
-    function clearError(field) {
-        const newErrors = { ...errors.value };
-        delete newErrors[field];
-        errors.value = newErrors;
-    }
-
-    // ═══ Helpers ═══
-    const hasErrors = computed(() => Object.keys(errors.value).length > 0);
-
-    return {
-        errors,
-        hasErrors,
-        validateEmail,
-        validatePassword,
-        validateName,
-        validateBirthDate,
-        validateLogin,
-        validateRegister,
-        clearErrors,
-        clearError,
-    };
+  return {
+    errors,
+    hasErrors,
+    validateRequiredEmail,
+    validateRequired,
+    setErrors,
+    clearError,
+    clearAllErrors,
+  };
 }

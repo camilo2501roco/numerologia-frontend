@@ -36,7 +36,7 @@
         </div>
 
         <!-- Botón Registro -->
-        <CosmicButton label="Crear Cuenta ✦" variant="primary" :loading="loading" loading-text="Creando portal..."
+        <CosmicButton label="Crear Cuenta " variant="primary" :loading="loading" loading-text="Creando portal..."
           @click="handleRegister" />
 
 
@@ -78,7 +78,7 @@ import CosmicButton from "@/components/Auth/CosmicButton.vue";
 
 const router = useRouter();
 const authStore = useAuthStore();
-const { errors, validateRegister, clearError, clearErrors } = useAuthForm();
+const { errors, setErrors, clearError, validateRequired, validateRequiredEmail } = useAuthForm();
 const notify = useNotifications();
 
 const nombre = ref("");
@@ -88,15 +88,15 @@ const fechaNacimiento = ref("");
 const loading = ref(false);
 
 async function handleRegister() {
-  // Validar campos
-  if (
-    !validateRegister(
-      nombre.value,
-      email.value,
-      password.value,
-      fechaNacimiento.value
-    )
-  ) {
+  // Validación UX mínima
+  const newErrors = {};
+  if (validateRequired(nombre.value, "Nombre")) newErrors.nombre = validateRequired(nombre.value, "Nombre");
+  if (validateRequiredEmail(email.value)) newErrors.email = validateRequiredEmail(email.value);
+  if (validateRequired(password.value, "Contraseña")) newErrors.password = validateRequired(password.value, "Contraseña");
+  if (validateRequired(fechaNacimiento.value, "Fecha de nacimiento")) newErrors.fechaNacimiento = validateRequired(fechaNacimiento.value, "Fecha de nacimiento");
+
+  if (Object.keys(newErrors).length > 0) {
+    setErrors(newErrors);
     return;
   }
 
