@@ -29,11 +29,7 @@
 
       <!-- Botón generar -->
       <div v-if="!lecturaDiaria" class="daily-generate">
-        <div
-          class="daily-orb"
-          @click="handleGenerarDiaria"
-          :class="{ 'daily-orb--loading': generandoDiaria }"
-        >
+        <div class="daily-orb" @click="handleGenerarDiaria" :class="{ 'daily-orb--loading': generandoDiaria }">
           <div class="daily-orb__glow"></div>
           <div class="daily-orb__inner">
             <q-spinner-dots v-if="generandoDiaria" color="white" size="28px" />
@@ -108,17 +104,11 @@
 
       <!-- Lista -->
       <div v-else class="history-list">
-        <div
-          v-for="lectura in historial"
-          :key="lectura._id"
-          class="glass-card history-item"
-          @click="openReading(lectura)"
-        >
+        <div v-for="lectura in historial" :key="lectura._id" class="glass-card history-item"
+          @click="openReading(lectura)">
           <div class="history-item__left">
-            <div
-              class="history-item__type"
-              :class="lectura.tipo === 'principal' ? 'history-item__type--principal' : 'history-item__type--diaria'"
-            >
+            <div class="history-item__type"
+              :class="lectura.tipo === 'principal' ? 'history-item__type--principal' : 'history-item__type--diaria'">
               <q-icon :name="lectura.tipo === 'principal' ? 'auto_awesome' : 'wb_sunny'" size="16px" />
             </div>
             <div class="history-item__info">
@@ -313,11 +303,15 @@ async function handleGenerarDiaria() {
     notify.success("Tu lectura diaria ha sido revelada");
     selectedReading.value = res.data;
   } catch (error) {
-    notify.error(
-      error.response?.data?.mensaje ||
-      error.response?.data?.error ||
-      "Error al generar la lectura diaria"
-    );
+    if (error.response?.status === 409) {
+      notify.warning("Ya generaste tu lectura diaria. Vuelve mañana.");
+    } else {
+      notify.error(
+        error.response?.data?.error ||
+        error.response?.data?.mensaje ||
+        "Error al generar la lectura diaria"
+      );
+    }
   } finally {
     generandoDiaria.value = false;
   }
@@ -477,8 +471,17 @@ async function handleGenerarDiaria() {
 }
 
 @keyframes pulse-daily {
-  0%, 100% { transform: scale(1); opacity: 1; }
-  50% { transform: scale(1.12); opacity: 0.6; }
+
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  50% {
+    transform: scale(1.12);
+    opacity: 0.6;
+  }
 }
 
 /* ═══ Daily Card ═══ */

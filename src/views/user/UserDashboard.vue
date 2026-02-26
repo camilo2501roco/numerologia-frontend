@@ -47,10 +47,7 @@
         </p>
         <div class="existing-reading__footer">
           <span class="existing-reading__cta">Click para ver lectura completa →</span>
-          <button class="existing-reading__regen" @click.stop="handleRegenerarLectura" :disabled="regenerando">
-            <q-icon name="refresh" size="14px" />
-            {{ regenerando ? 'Eliminando...' : 'Regenerar lectura' }}
-          </button>
+
         </div>
       </div>
     </section>
@@ -128,7 +125,8 @@
 
     <!-- ═══ Modal Lectura ═══ -->
     <transition name="modal">
-      <div v-if="showReadingModal && lecturaPrincipal" class="reading-modal-overlay" @click.self="showReadingModal = false">
+      <div v-if="showReadingModal && lecturaPrincipal" class="reading-modal-overlay"
+        @click.self="showReadingModal = false">
         <div class="reading-modal">
           <!-- Cerrar -->
           <button class="reading-modal__close" @click="showReadingModal = false">
@@ -409,8 +407,17 @@ function handlePremiumClick() {
 }
 
 @keyframes pulse-orb {
-  0%, 100% { transform: scale(1); opacity: 1; }
-  50% { transform: scale(1.15); opacity: 0.6; }
+
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  50% {
+    transform: scale(1.15);
+    opacity: 0.6;
+  }
 }
 
 /* Tags */

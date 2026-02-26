@@ -15,7 +15,7 @@
 
       <!-- Panel izquierdo: beneficios -->
       <div class="glass-card benefits-card">
-        <p class="benefits-card__eyebrow">✦ PLAN PREMIUM</p>
+        <p class="benefits-card__eyebrow"> PLAN PREMIUM</p>
         <h2 class="benefits-card__title">Acceso Completo al Cosmos</h2>
         <p class="benefits-card__desc">
           Suscripción mensual con renovación automática. Cancela cuando quieras.
@@ -91,12 +91,8 @@
           </div>
 
           <!-- Botón activar -->
-          <button
-            class="btn-premium"
-            :class="{ 'btn-premium--loading': activando }"
-            :disabled="activando"
-            @click="handleActivar"
-          >
+          <button class="btn-premium" :class="{ 'btn-premium--loading': activando }" :disabled="activando"
+            @click="handleActivar">
             <q-spinner-dots v-if="activando" color="white" size="20px" />
             <span v-else>Activar Membresía ✦</span>
           </button>

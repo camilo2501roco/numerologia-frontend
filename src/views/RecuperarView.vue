@@ -2,11 +2,8 @@
   <div class="recuperar-view">
     <!-- ═══ PASO 1: Ingresar Email ═══ -->
     <div v-if="step === 1" class="step-container">
-      <AuthHeader
-        title="Restaura Tu "
-        highlight="Conexión"
-        subtitle="Ingresa el correo asociado a tu carta astral para recibir un código de recuperación."
-      />
+      <AuthHeader title="Restaura Tu " highlight="Conexión"
+        subtitle="Ingresa el correo asociado a tu carta astral para recibir un código de recuperación." />
 
       <div class="glass-card recovery-card">
         <span class="card-deco card-deco--moon">🌙</span>
@@ -15,23 +12,11 @@
         <h2 class="recovery-card__title">Recuperar Acceso</h2>
 
         <q-form @submit.prevent="handleSendCode">
-          <CosmicInput
-            v-model="email"
-            icon="alternate_email"
-            label="Correo Electrónico"
-            type="email"
-            placeholder="tu@cosmos.com"
-            :error="errors.email"
-            @update:model-value="errors.email = ''"
-          />
+          <CosmicInput v-model="email" icon="alternate_email" label="Correo Electrónico" type="email"
+            placeholder="tu@cosmos.com" :error="errors.email" @update:model-value="errors.email = ''" />
 
-          <CosmicButton
-            label="Enviar Código →"
-            variant="orange"
-            :loading="loading"
-            loading-text="Enviando..."
-            @click="handleSendCode"
-          />
+          <CosmicButton label="Enviar Código →" variant="orange" :loading="loading" loading-text="Enviando..."
+            @click="handleSendCode" />
         </q-form>
 
 
@@ -46,11 +31,8 @@
 
     <!-- ═══ PASO 2: Verificar Código ═══ -->
     <div v-if="step === 2" class="step-container">
-      <AuthHeader
-        title="Verifica Tu "
-        highlight="Esencia"
-        subtitle="Hemos enviado un código celestial a tu correo. Ingrésalo a continuación."
-      />
+      <AuthHeader title="Verifica Tu " highlight="Esencia"
+        subtitle="Hemos enviado un código celestial a tu correo. Ingrésalo a continuación." />
 
       <div class="glass-card recovery-card">
         <h2 class="recovery-card__title">Código de Verificación</h2>
@@ -58,20 +40,10 @@
         <q-form @submit.prevent="handleVerifyCode">
           <!-- 6 inputs individuales -->
           <div class="code-inputs">
-            <input
-              v-for="(digit, index) in codeDigits"
-              :key="index"
-              :ref="el => codeRefs[index] = el"
-              type="text"
-              maxlength="1"
-              class="code-input"
-              :class="{ 'code-input--filled': digit }"
-              :value="digit"
-              @input="handleCodeInput(index, $event)"
-              @keydown="handleCodeKeydown(index, $event)"
-              @paste="handleCodePaste($event)"
-              inputmode="numeric"
-            />
+            <input v-for="(digit, index) in codeDigits" :key="index" :ref="el => codeRefs[index] = el" type="text"
+              maxlength="1" class="code-input" :class="{ 'code-input--filled': digit }" :value="digit"
+              @input="handleCodeInput(index, $event)" @keydown="handleCodeKeydown(index, $event)"
+              @paste="handleCodePaste($event)" inputmode="numeric" />
           </div>
 
           <!-- Timer -->
@@ -84,13 +56,8 @@
             <a href="#" class="resend-link" @click.prevent="handleResend">Reenviar código</a>
           </p>
 
-          <CosmicButton
-            label="Validar Código →"
-            variant="orange"
-            :loading="loading"
-            loading-text="Verificando..."
-            @click="handleVerifyCode"
-          />
+          <CosmicButton label="Validar Código →" variant="orange" :loading="loading" loading-text="Verificando..."
+            @click="handleVerifyCode" />
         </q-form>
 
 
@@ -106,33 +73,15 @@
 
     <!-- ═══ PASO 3: Nueva Contraseña ═══ -->
     <div v-if="step === 3" class="step-container">
-      <AuthHeader
-        title="Forja Un "
-        highlight="Nuevo Camino"
-        subtitle="Alinea tu destino con una nueva clave segura."
-      />
+      <AuthHeader title="Forja Un " highlight="Nuevo Camino" subtitle="Alinea tu destino con una nueva clave segura." />
 
       <div class="glass-card recovery-card">
         <q-form @submit.prevent="handleChangePassword">
-          <CosmicInput
-            v-model="newPassword"
-            icon="lock"
-            label="Nueva Contraseña"
-            type="password"
-            placeholder="••••••••"
-            :error="errors.password"
-            @update:model-value="errors.password = ''"
-          />
+          <CosmicInput v-model="newPassword" icon="lock" label="Nueva Contraseña" type="password" placeholder="••••••••"
+            :error="errors.password" @update:model-value="errors.password = ''" />
 
-          <CosmicInput
-            v-model="confirmPassword"
-            icon="lock_reset"
-            label="Confirmar Contraseña"
-            type="password"
-            placeholder="••••••••"
-            :error="errors.confirm"
-            @update:model-value="errors.confirm = ''"
-          />
+          <CosmicInput v-model="confirmPassword" icon="lock_reset" label="Confirmar Contraseña" type="password"
+            placeholder="••••••••" :error="errors.confirm" @update:model-value="errors.confirm = ''" />
 
           <!-- Indicador de fuerza -->
           <div class="strength-bar">
@@ -145,13 +94,8 @@
             Fuerza: <strong :class="'strength--' + passwordStrength">{{ strengthText }}</strong>
           </p>
 
-          <CosmicButton
-            label="Restablecer Contraseña ✦"
-            variant="orange"
-            :loading="loading"
-            loading-text="Actualizando..."
-            @click="handleChangePassword"
-          />
+          <CosmicButton label="Restablecer Contraseña ✦" variant="orange" :loading="loading"
+            loading-text="Actualizando..." @click="handleChangePassword" />
         </q-form>
 
 
@@ -176,11 +120,7 @@
           El cosmos está alineado para tu regreso.
         </p>
 
-        <CosmicButton
-          label="Volver al Login →"
-          variant="orange"
-          @click="$router.push('/login')"
-        />
+        <CosmicButton label="Volver al Login →" variant="orange" @click="$router.push('/login')" />
 
         <div class="cosmic-divider"><span>◇</span></div>
 
@@ -314,7 +254,7 @@ async function handleVerifyCode() {
   loading.value = true;
   try {
     await postData("usuarios/verificar-codigo", { email: email.value, codigo: code });
-    notify.success("Código verificado correctamente ✦");
+    notify.success("Código verificado correctamente ");
     step.value = 3;
   } catch (error) {
     notify.error(error.response?.data?.msg || "Código inválido o expirado");
@@ -511,10 +451,21 @@ async function handleChangePassword() {
   transition: background 0.3s ease;
 }
 
-.strength--1 { background: #ef4444; }
-.strength--2 { background: #f59e0b; }
-.strength--3 { background: #22c55e; }
-.strength--4 { background: #22c55e; }
+.strength--1 {
+  background: #ef4444;
+}
+
+.strength--2 {
+  background: #f59e0b;
+}
+
+.strength--3 {
+  background: #22c55e;
+}
+
+.strength--4 {
+  background: #22c55e;
+}
 
 .strength-label {
   font-size: 0.72rem;
@@ -526,10 +477,21 @@ async function handleChangePassword() {
   font-weight: 700;
 }
 
-.strength--1 { color: #ef4444; }
-.strength--2 { color: #f59e0b; }
-.strength--3 { color: #22c55e; }
-.strength--4 { color: #22c55e; }
+.strength--1 {
+  color: #ef4444;
+}
+
+.strength--2 {
+  color: #f59e0b;
+}
+
+.strength--3 {
+  color: #22c55e;
+}
+
+.strength--4 {
+  color: #22c55e;
+}
 
 /* ── Éxito ── */
 .success-card {
