@@ -92,14 +92,17 @@
 
           <!-- Botón activar -->
           <button class="btn-premium" :class="{ 'btn-premium--loading': activando }" :disabled="activando"
-            @click="handleActivar">
+            @click="handlePagar">
             <q-spinner-dots v-if="activando" color="white" size="20px" />
-            <span v-else>Activar Membresía ✦</span>
+            <span v-else>
+              <q-icon name="payment" size="18px" style="margin-right:6px;" />
+              Pagar con MercadoPago ✦
+            </span>
           </button>
 
           <p class="checkout-card__terms">
-            Al activar aceptas los términos del servicio.
-            Tu membresía es válida por 30 días desde la activación.
+            Al continuar aceptas los términos del servicio. Serás redirigido a
+            MercadoPago para completar tu pago de forma segura.
           </p>
         </div>
       </div>
@@ -156,38 +159,22 @@ const beneficios = [
   },
 ];
 
-async function handleActivar() {
+async function handlePagar() {
   if (activando.value || yaEsActivo.value) return;
-
-  const userId = authStore.usuario?.id || authStore.usuario?._id;
-  if (!userId) {
-    notify.error("No se pudo identificar tu cuenta. Inicia sesión de nuevo.");
-    return;
-  }
 
   activando.value = true;
   try {
-    const res = await postData("pagos", {
-      usuario_id: userId,
-      monto: 19900,
-      metodo: "tarjeta",
-    });
+    // Llama al backend para crear la preferencia en MercadoPago
+    const res = await postData("pagos/crear-preferencia", {});
 
-    // Actualizar el store con el nuevo estado activo
-    authStore.setAuth({
-      token: authStore.token,
-      usuario: {
-        ...authStore.usuario,
-        estado: "activo",
-      },
-    });
+    const url = res.init_point;
+    if (!url) {
+      notify.error("No se recibió la URL de pago. Intenta de nuevo.");
+      return;
+    }
 
-    notify.success("¡Membresía activada! Bienvenido a Premium ✦");
-
-    // Redirigir al dashboard premium
-    setTimeout(() => {
-      router.push("/usuario/premium");
-    }, 1200);
+    // Redirigir al checkout de MercadoPago (sale del SPA)
+    window.location.href = url;
   } catch (error) {
     if (error.response?.status === 409) {
       notify.warning("Ya tienes una membresía activa.");
@@ -198,7 +185,8 @@ async function handleActivar() {
       setTimeout(() => router.push("/usuario/premium"), 1000);
     } else {
       notify.error(
-        error.response?.data?.error || "Error al activar la membresía. Intenta de nuevo."
+        error.response?.data?.error ||
+          "Error al iniciar el pago. Intenta de nuevo."
       );
     }
   } finally {

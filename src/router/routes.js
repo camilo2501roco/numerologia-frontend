@@ -13,6 +13,7 @@ import UserDashboard from "../views/user/UserDashboard.vue";
 import UserDashboardPremium from "../views/user/UserDashboardPremium.vue";
 import UserPerfil from "../views/user/UserPerfil.vue";
 import MembresiaView from "../views/user/MembresiaView.vue";
+import PagoExitosoView from "../views/user/PagoExitosoView.vue";
 
 const routes = [
   // ═══ Rutas Públicas (Auth) ═══
@@ -91,6 +92,11 @@ const routes = [
         path: "premium",
         name: "UserDashboardPremium",
         component: UserDashboardPremium,
+      },
+      {
+        path: "pago-exitoso",
+        name: "PagoExitoso",
+        component: PagoExitosoView,
       },
     ],
   },
