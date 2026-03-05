@@ -86,7 +86,7 @@
             </div>
             <div class="resumen__row resumen__row--total">
               <span>Total hoy</span>
-              <span>$19.900 COP</span>
+              <span>$1000</span>
             </div>
           </div>
 
@@ -96,13 +96,13 @@
             <q-spinner-dots v-if="activando" color="white" size="20px" />
             <span v-else>
               <q-icon name="payment" size="18px" style="margin-right:6px;" />
-              Pagar con MercadoPago ✦
+              Activar Membresía Premium ✦
             </span>
           </button>
 
           <p class="checkout-card__terms">
-            Al continuar aceptas los términos del servicio. Serás redirigido a
-            MercadoPago para completar tu pago de forma segura.
+            Al continuar aceptas los términos del servicio.
+            Tu membresía se activará de forma inmediata.
           </p>
         </div>
       </div>
@@ -164,17 +164,21 @@ async function handlePagar() {
 
   activando.value = true;
   try {
-    // Llama al backend para crear la preferencia en MercadoPago
-    const res = await postData("pagos/crear-preferencia", {});
+    // Simular pago: usa el endpoint existente POST /api/pagos
+    await postData("pagos", {
+      usuario_id: authStore.usuario._id || authStore.usuario.id,
+      monto: 19900,
+      metodo: "tarjeta",
+    });
 
-    const url = res.init_point;
-    if (!url) {
-      notify.error("No se recibió la URL de pago. Intenta de nuevo.");
-      return;
-    }
+    // Actualizar estado local del usuario a activo
+    authStore.setAuth({
+      token: authStore.token,
+      usuario: { ...authStore.usuario, estado: "activo" },
+    });
 
-    // Redirigir al checkout de MercadoPago (sale del SPA)
-    window.location.href = url;
+    notify.success("¡Pago exitoso! Tu membresía Premium ha sido activada.");
+    setTimeout(() => router.push("/usuario/premium"), 1500);
   } catch (error) {
     if (error.response?.status === 409) {
       notify.warning("Ya tienes una membresía activa.");
@@ -186,7 +190,7 @@ async function handlePagar() {
     } else {
       notify.error(
         error.response?.data?.error ||
-          "Error al iniciar el pago. Intenta de nuevo."
+          "Error al activar la membresía. Intenta de nuevo."
       );
     }
   } finally {

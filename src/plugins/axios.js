@@ -18,8 +18,8 @@ axiosInstance.interceptors.request.use(
     const token = authStore.token;
 
     if (token) {
-      // Configuramos el header personalizado solicitado
-      config.headers["Authorization"] = `Bearer ${token}`;
+      // Enviamos el token en el header x-token que espera el backend
+      config.headers["x-token"] = token;
     }
     return config;
   },

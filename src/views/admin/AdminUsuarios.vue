@@ -26,7 +26,7 @@
       <div class="stat-card">
         <span class="stat-card__label">Admins</span>
         <span class="stat-card__value stat-card__value--orange">
-          {{ usuarios.filter(u => u.rol === 'administrador').length }}
+          {{ usuarios.filter(u => u.rol === 'administrador' || u.rol === 'admin').length }}
         </span>
       </div>
     </div>
@@ -76,7 +76,7 @@
           <button
             class="action-btn action-btn--edit"
             @click="toggleRol(usuario)"
-            :title="usuario.rol === 'administrador' ? 'Hacer usuario' : 'Hacer admin'"
+            :title="usuario.rol === 'administrador' || usuario.rol === 'admin' ? 'Hacer usuario' : 'Hacer admin'"
           >
             <q-icon name="edit" size="16px" />
           </button>
@@ -94,7 +94,7 @@
         </div>
 
         <!-- Avatar -->
-        <div class="usuario-card__avatar" :class="{ 'usuario-card__avatar--admin': usuario.rol === 'administrador' }">
+        <div class="usuario-card__avatar" :class="{ 'usuario-card__avatar--admin': usuario.rol === 'administrador' || usuario.rol === 'admin' }">
           {{ getInitials(usuario.nombre) }}
         </div>
 
@@ -113,7 +113,7 @@
           </div>
           <div class="detail-item">
             <span class="detail-item__label">Rol</span>
-            <span class="detail-item__value" :class="{ 'text-orange': usuario.rol === 'administrador' }">
+            <span class="detail-item__value" :class="{ 'text-orange': usuario.rol === 'administrador' || usuario.rol === 'admin' }">
               {{ usuario.rol }}
             </span>
           </div>
@@ -242,8 +242,8 @@ const filteredUsuarios = computed(() => {
     const query = searchQuery.value.toLowerCase();
     result = result.filter(
       (u) =>
-        u.nombre.toLowerCase().includes(query) ||
-        u.email.toLowerCase().includes(query)
+        (u.nombre && u.nombre.toLowerCase().includes(query)) ||
+        (u.email && u.email.toLowerCase().includes(query))
     );
   }
 
@@ -290,7 +290,7 @@ function formatDate(dateStr) {
 
 // Acciones
 async function toggleRol(usuario) {
-  const newRol = usuario.rol === "administrador" ? "usuario" : "administrador";
+  const newRol = (usuario.rol === "administrador" || usuario.rol === "admin") ? "usuario" : "administrador";
   try {
     await putData(`admin/usuario/${usuario._id}/rol`, { rol: newRol });
     usuario.rol = newRol;

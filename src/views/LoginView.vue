@@ -100,7 +100,7 @@ async function handleLogin() {
     notify.success(` Bienvenido, ${res.usuario.nombre}`);
 
     // Redirigir según rol
-    if (res.usuario.rol === "administrador") {
+    if (res.usuario.rol === "administrador" || res.usuario.rol === "admin") {
       router.push("/admin");
     } else if (res.usuario.estado === "activo") {
       router.push("/usuario/premium");

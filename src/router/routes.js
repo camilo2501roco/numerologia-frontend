@@ -119,7 +119,7 @@ router.beforeEach((to, from, next) => {
 
   // Guard: rutas admin
   if (to.matched.some((record) => record.meta.requiresAdmin)) {
-    if (parsed?.token && parsed.usuario?.rol === "administrador") {
+    if (parsed?.token && (parsed.usuario?.rol === "administrador" || parsed.usuario?.rol === "admin")) {
       return next();
     }
     return next("/login");
