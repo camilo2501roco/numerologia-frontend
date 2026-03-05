@@ -3,6 +3,7 @@
     :label="label"
     :loading="loading"
     :disable="loading"
+    :type="type"
     no-caps
     unelevated
     class="cosmic-btn"
@@ -28,6 +29,7 @@ defineProps({
   icon: { type: String, default: "" },
   variant: { type: String, default: "primary" }, // primary | orange
   loadingText: { type: String, default: "Conectando..." },
+  type: { type: String, default: "submit" },
 });
 
 defineEmits(["click"]);

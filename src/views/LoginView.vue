@@ -26,8 +26,7 @@
         </div>
 
         <!-- Botón Login -->
-        <CosmicButton label="Iniciar Sesión →" variant="orange" :loading="loading" loading-text="Verificando..."
-          @click="handleLogin" />
+        <CosmicButton label="Iniciar Sesión →" variant="orange" :loading="loading" loading-text="Verificando..." />
 
 
       </q-form>

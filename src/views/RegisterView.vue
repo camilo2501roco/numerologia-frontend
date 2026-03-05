@@ -36,8 +36,7 @@
         </div>
 
         <!-- Botón Registro -->
-        <CosmicButton label="Crear Cuenta " variant="primary" :loading="loading" loading-text="Creando portal..."
-          @click="handleRegister" />
+        <CosmicButton label="Crear Cuenta " variant="primary" :loading="loading" loading-text="Creando portal..." />
 
 
       </q-form>

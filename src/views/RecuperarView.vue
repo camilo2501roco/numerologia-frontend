@@ -15,8 +15,7 @@
           <CosmicInput v-model="email" icon="alternate_email" label="Correo Electrónico" type="email"
             placeholder="tu@cosmos.com" :error="errors.email" @update:model-value="errors.email = ''" />
 
-          <CosmicButton label="Enviar Código →" variant="orange" :loading="loading" loading-text="Enviando..."
-            @click="handleSendCode" />
+          <CosmicButton label="Enviar Código →" variant="orange" :loading="loading" loading-text="Enviando..." />
         </q-form>
 
 
@@ -56,8 +55,7 @@
             <a href="#" class="resend-link" @click.prevent="handleResend">Reenviar código</a>
           </p>
 
-          <CosmicButton label="Validar Código →" variant="orange" :loading="loading" loading-text="Verificando..."
-            @click="handleVerifyCode" />
+          <CosmicButton label="Validar Código →" variant="orange" :loading="loading" loading-text="Verificando..." />
         </q-form>
 
 
@@ -95,7 +93,7 @@
           </p>
 
           <CosmicButton label="Restablecer Contraseña ✦" variant="orange" :loading="loading"
-            loading-text="Actualizando..." @click="handleChangePassword" />
+            loading-text="Actualizando..." />
         </q-form>
 
 
